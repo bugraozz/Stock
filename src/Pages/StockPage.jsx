@@ -137,6 +137,8 @@ const StockPage = () => {
                 console.log('Scanned stock response:', response.data); // Sunucu yanıtını kontrol edin
                 if (response.data) {
                     setDisplayedStock(response.data); // Doğru verileri state'e ayarlayın
+                    stockSearchHandler(event); // Arama sonuçlarını güncelleyin
+                    
                 } else {
                     setDisplayedStock(null); // Stok bulunamadı
                 }
@@ -279,3 +281,6 @@ const StockPage = () => {
 };
 
 export default StockPage;
+
+
+
