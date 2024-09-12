@@ -1,0 +1,32 @@
+.invoice-list {
+    padding: 20px;
+  }
+  
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .invoice-table th,
+  .invoice-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .invoice-table th {
+    background-color: #f4f4f4;
+    text-align: left;
+  }
+  
+  .view-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .view-button:hover {
+    background-color: #0056b3;
+  }
+  

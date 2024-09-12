@@ -5,6 +5,13 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import AdminPage from './Pages/AdminPage';
 import HomePage from './Pages/HomePage';
 import StockPage from './Pages/StockPage';
+import ProductSell from './Pages/ProductSell';
+import CustomerPage from './Pages/CustomerPage';
+import Invoice from './Pages/Invoice';
+import ReportPage from './Pages/ReportPage';
+import InvoicePDF from './Pages/InvoicePDF';
+import InvoiceList from './Pages/InvoiceList';
+import InvoiceDetail from './Pages/InvoiceDetail';
 
 function App() {
   const [showForm, setShowForm] = useState(false);
@@ -92,6 +99,14 @@ function App() {
       <Route path="/admin" element={<AdminPage/>} />
       <Route path="/home"  element={<HomePage/>} />
       <Route path="/stock" element={<StockPage/>}/>
+      <Route path="/sell"  element={<ProductSell/>}/>
+      <Route path="/customer" element={<CustomerPage/>}/>
+      <Route path="/invoice" element={<Invoice/>}/>
+      <Route path="/report" element={<ReportPage/>}/>
+      <Route path="/pdf" element={<InvoicePDF/>}/>
+      <Route path="/pdflist" element={<InvoiceList/>}/>
+      <Route path="/invoices/:id" element={<InvoiceDetail />} />
+    
     </Routes>
   );
 }

@@ -1,0 +1,26 @@
+.invoice-detail {
+    padding: 20px;
+  }
+  
+  .invoice-header,
+  .invoice-customer,
+  .invoice-products {
+    margin-bottom: 20px;
+  }
+  
+  .products-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .products-table th,
+  .products-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .products-table th {
+    background-color: #f4f4f4;
+    text-align: left;
+  }
+  

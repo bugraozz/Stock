@@ -228,7 +228,7 @@ const StockPage = () => {
             <table className="stock-table">
                 <thead>
                 <tr>
-                    <th>Barcode</th>
+                    {/* <th>Barcode</th> */}
                     <th>Product Number</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
@@ -242,12 +242,12 @@ const StockPage = () => {
                 <tbody>
                 {displayStocks.map(stock => (
                     <tr key={stock.Product_Number}>
-                    <td>
+                    {/* <td>
                         <div>
                         <Barcode value={`${stock.Product_Number} - ${stock.Product_Name} - ${stock.Quantity} - ${stock.Category}`} />
                             
                         </div>
-                    </td>
+                    </td> */}
                     <td>{stock.Product_Number}</td>
                     <td>{stock.Product_Name}</td>
                     <td>{stock.Quantity}</td>
@@ -281,6 +281,8 @@ const StockPage = () => {
 };
 
 export default StockPage;
+
+
 
 
 
