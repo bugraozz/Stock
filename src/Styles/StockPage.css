@@ -1,7 +1,8 @@
-/* StockAdd.css */
+StockAdd.css
 
 .stock-container {
-    max-width: 800px;
+    max-width: 1800px;
+    max-height: 1200px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -138,6 +139,23 @@
     background-color: #c82333;
 }
 
+/* Arka planı kaplamak için yeni stil ekliyoruz */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Tam saydamlık için daha koyu bir renk */
+    z-index: 1000; /* Modalın arkasında olacak */
+}
+
+/* Modal açıldığında arkaplanı bulanıklaştırmak için */
+body.modal-open .stock-container {
+    filter: blur(5px); /* Arka plan bulanık */
+    pointer-events: none; /* Arka planda etkileşim devre dışı */
+}
+
 @media (max-width: 600px) {
     .search-form {
         flex-direction: column;
@@ -149,4 +167,32 @@
     }
 }
 
+/* Diğer stil düzenlemeleri burada devam edebilir */
+.camera-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
 
+#video-container {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #000; 
+}
+
+.barcode-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: red;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 10; 
+}

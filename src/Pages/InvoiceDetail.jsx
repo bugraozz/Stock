@@ -1,70 +1,44 @@
+
+
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import '../Styles/InvoiceDetail.css'; // Stil dosyasını eklemeyi unutma
 
-const InvoiceDetail = () => {
-  const { id } = useParams();
-  const [invoice, setInvoice] = useState(null);
-
-  useEffect(() => {
-    const fetchInvoice = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/invoices/${id}`);
-        console.log(response.data);
-        setInvoice(response.data);
-      } catch (error) {
-        console.error('Fatura yüklenirken bir hata oluştu:', error);
-      }
-    };
-
-    fetchInvoice();
-  }, [id]);
-
-  if (!invoice) return <p>Yükleniyor...</p>;
-
+const InvoiceDetail = ({ invoice }) => {
   return (
-    <div className="invoice-detail">
-      <h1>Fatura Detayı</h1>
-      <div className="invoice-header">
-        <h2>Fatura ID: {invoice.id}</h2>
-        <p>Tarih: {new Date(invoice.date).toLocaleDateString()}</p>
+    <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-2 text-black dark:text-black">Müşteri Bilgileri:</h2>
+        <p className="text-gray-700 dark:text-black ">Adı: {invoice.customer.name}</p>
+        <p className="text-gray-700 dark:text-black">Adres: {invoice.customer.address}</p>
+        <p className="text-gray-700 dark:text-black">Telefon: {invoice.customer.phone}</p>
+        <p className="text-gray-700 dark:text-black">Email: {invoice.customer.email}</p>
       </div>
-      <div className="invoice-customer">
-        <h3>Müşteri Bilgileri</h3>
-        <p>Adı: {invoice.customer.name}</p>
-        <p>Adres: {invoice.customer.address}</p>
-        <p>Email: {invoice.customer.email}</p>
-        <p>Telefon: {invoice.customer.phone}</p>
+
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-2 text-black dark:text-black ">Ürünler:</h2>
+        {invoice.products.map((item, index) => {
+          const price = parseFloat(item.price) || 0;
+          const quantity = item.quantity || 0;
+          const total = (price * quantity).toFixed(2);
+          const currency = item.currency || '₺';
+
+          return (
+            <div key={index} className="flex mb-2 text-black dark:text-black">
+              <div className="flex-1">{item.productName || 'Ürün adı mevcut değil'}</div>
+              <div className="flex-1">{quantity}</div>
+              <div className="flex-1">{item.price ? `${item.price} ${currency}` : 'Fiyat mevcut değil'}</div>
+              <div className="flex-1">{item.price && quantity ? `${total} ${currency}` : 'Toplam mevcut değil'}</div>
+            </div>
+          );
+        })}
       </div>
-      <div className="invoice-products">
-        <h3>Ürünler</h3>
-        <table className="products-table">
-          <thead>
-            <tr>
-              <th>Ürün Adı</th>
-              <th>Miktar</th>
-              <th>Fiyat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoice.products.map((item, index) => (
-              <tr key={index}>
-                <td>{item.product.Product_Name}</td>
-                <td>{item.quantity}</td>
-                <td>{item.product.SellingPrice}₺</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="invoice-total">
-        <h3>Toplam Tutar: {invoice.total}₺</h3>
+
+      <div className="text-right mt-8">
+        <h3 className="text-lg font-semibold text-black dark:text-black">
+          Toplam Tutar: {invoice.totalPrice} {invoice.currency || '₺'}
+        </h3>
       </div>
     </div>
   );
 };
 
 export default InvoiceDetail;
-

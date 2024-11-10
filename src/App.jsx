@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import './App.css';
-import axios from 'axios';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+
+
+
+import React from 'react';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import AdminPage from './Pages/AdminPage';
 import HomePage from './Pages/HomePage';
 import StockPage from './Pages/StockPage';
@@ -12,102 +13,46 @@ import ReportPage from './Pages/ReportPage';
 import InvoicePDF from './Pages/InvoicePDF';
 import InvoiceList from './Pages/InvoiceList';
 import InvoiceDetail from './Pages/InvoiceDetail';
+import { useRole, RoleProvider } from './Pages/Role';
+import LoginPage from './Pages/LoginPage';
+import SalesChart from './Pages/SalesChart';
+import BarcodeSales from './Pages/BarcodeSales';
+import ThemeController from './component/ThemeController';
+import './App.css';
+
+const ProtectedRoute = ({ element, requiredRoles }) => {
+  const { role } = useRole();
+  return requiredRoles.includes(role) ? element : <Navigate to="/" />;
+};
 
 function App() {
-  const [showForm, setShowForm] = useState(false);
-  const formRef = useRef(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (formRef.current && !formRef.current.contains(event.target)) {
-        setShowForm(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleButtonClick = () => {
-    setShowForm(true);
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3001/login', { username, password });
-      localStorage.setItem('token', response.data.token);
-      setShowForm(false);
-      navigate('/home'); 
-    } catch (err) {
-      if (err.response && err.response.data) {
-        console.error('Giriş başarısız:', err.response.data);
-      } else {
-        console.error('Giriş başarısız:', err.message);
-      }
-    }
-  };
+  const location = useLocation();
 
   return (
-    <Routes>
-      <Route path="/" element={
-        <>
-          <div className="app_search-list-container">
-            <form className="app_search-form">
-              <input type="text" className="app_form-input" placeholder="Search product" />
-              <button className="app_search-btn" type="submit">Search</button>
-            </form>
-          </div>
-          <button onClick={handleButtonClick} className="top-left-button">Log in</button>
-          {showForm && (
-            <div ref={formRef} className="app_form-container">
-              <form onSubmit={handleLogin}>
-                <div className="app_form-group">
-                  <label htmlFor="username">User Name:</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="app_form-group">
-                  <label htmlFor="password">Password:</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit">Login</button>
-              </form>
-            </div>
-          )}
-        </>
-      } />
-      <Route path="/admin" element={<AdminPage/>} />
-      <Route path="/home"  element={<HomePage/>} />
-      <Route path="/stock" element={<StockPage/>}/>
-      <Route path="/sell"  element={<ProductSell/>}/>
-      <Route path="/customer" element={<CustomerPage/>}/>
-      <Route path="/invoice" element={<Invoice/>}/>
-      <Route path="/report" element={<ReportPage/>}/>
-      <Route path="/pdf" element={<InvoicePDF/>}/>
-      <Route path="/pdflist" element={<InvoiceList/>}/>
-      <Route path="/invoices/:id" element={<InvoiceDetail />} />
-    
-    </Routes>
+    <RoleProvider>
+      <div>
+       
+        <div className="fixed top-4  left-1 z-50">
+          <ThemeController />
+        </div>
+
+        <Routes>
+          <Route path="/" element={<LoginPage setShowForm={() => {}} />} />
+          <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} requiredRoles={['admin']} />} />
+          <Route path="/home" element={<ProtectedRoute element={<HomePage />} requiredRoles={['admin', 'user', 'executive']} />} />
+          <Route path="/stock" element={<ProtectedRoute element={<StockPage />} requiredRoles={['admin', 'user', 'executive']} />} />
+          <Route path="/sell" element={<ProtectedRoute element={<ProductSell />} requiredRoles={['admin', 'user']} />} />
+          <Route path="/customer" element={<ProtectedRoute element={<CustomerPage />} requiredRoles={['admin']} />} />
+          <Route path="/invoice" element={<ProtectedRoute element={<Invoice />} requiredRoles={['admin', 'executive']} />} />
+          <Route path="/report" element={<ProtectedRoute element={<ReportPage />} requiredRoles={['admin', 'executive']} />} />
+          <Route path="/pdf" element={<ProtectedRoute element={<InvoicePDF />} requiredRoles={['admin', 'user']} />} />
+          <Route path="/pdflist" element={<ProtectedRoute element={<InvoiceList />} requiredRoles={['admin', 'user']} />} />
+          <Route path="/invoices/:id" element={<ProtectedRoute element={<InvoiceDetail />} requiredRoles={['admin', 'user']} />} />
+          <Route path="/chart" element={<ProtectedRoute element={<SalesChart />} requiredRoles={['admin', 'executive']} />} />
+          <Route path="/barcodesales" element={<ProtectedRoute element={<BarcodeSales />} requiredRoles={['admin', 'user']} />} />
+        </Routes>
+      </div>
+    </RoleProvider>
   );
 }
 

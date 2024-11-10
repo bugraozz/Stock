@@ -77,16 +77,16 @@ input {
 }
 
 button[type="submit"] {
-  padding: 10px 15px;
-  background-color: #ff0000;
+  padding: 10px 18px;
+  background-color: #dc2626;
   color: #fff;
   border: none;
-  border-radius: 20px;
+  border-radius: 7px;
   cursor: pointer;
 }
 
 button[type="submit"]:hover {
-  background-color: #d48207;
+  background-color: #f00808;
 }
 
 .top-left-button {
@@ -124,5 +124,109 @@ button[type="submit"]:hover {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* Tüm görünüm yüksekliğini kaplar */
+  overflow: hidden;
+  background-color: #121212; /* Varsayılan arka plan rengi */
+  color: white; /* Yazı rengini beyaz yapar */
+}
+
+.app {
+  min-height: 100vh; /* Uygulamanın en az görünüm yüksekliğini kaplamasını sağlar */
+  background-color: inherit; /* Body'den arka plan rengi alır */
+}
+
+[data-theme="forest"] .btn {
+  border-width: 2px;
+  border-color: rgb(26, 80, 13);
+  background-color: rgb(26, 80, 13);
+  color: white ;
+}
+
+[data-theme="valentine"] .btn {
+  border-width: 2px;
+  border-color: rgb(156, 79, 187);
+  background-color: rgb(100, 67, 107);
+  color: white ;
+}
+
+[data-theme="cyberpunk"] .btn {
+  border-width: 2px;
+  border-color: rgb(238, 196, 7);
+  background-color: rgb(238, 196, 7);
+  color: black ;
+}
+
+[data-theme="cupcake"] .btn {
+  border-width: 2px;
+  border-color: rgb(255, 228, 225);
+  background-color: rgb(255, 228, 225);
+  color: black ;
+}
+
+[data-theme="retro"] .btn {
+  border-width: 2px;
+  border-color: rgb(131, 112, 81);
+  background-color: rgb(131, 112, 81);
+  color: black ;
+}
+
+[data-theme="dark"] .btn {
+  border-width: 2px;
+  border-color: rgb(18, 18, 18);
+  background-color: rgb(18, 18, 18);
+  color: white ;
+}
+
+
+
+[data-theme="forest"] .btn:hover {
+  background-color: rgb(68, 143, 50);
+  color: white ;
+}
+
+[data-theme="valentine"] .btn:hover {
+  background-color: rgb(156, 79, 187);
+  color: white ;
+}
+
+[data-theme="cyberpunk"] .btn:hover {
+  background-color: rgb(208, 211, 67);
+  color: black ;
+}
+
+[data-theme="cupcake"] .btn:hover {
+  background-color: rgb(190, 167, 165);
+  color: black ;
+}
+
+[data-theme="retro"] .btn:hover {
+  background-color: rgb(131, 106, 65);
+  color: black ;
+}
+
+[data-theme="dark"] .btn:hover {
+  background-color: rgb(38, 38, 38);
+  color: white ;
+}
+
+
+
+[data-theme="coffee"] .btn {
+  border-width: 2px;
+  border-color: rgb(41, 23, 23);
+  background-color: rgb(41, 23, 23);
+  color: white ;
+}
+
+[data-theme="coffee"] .btn:hover {
+  background-color: rgb(78, 47, 47);
+  color: white ;
 }
 

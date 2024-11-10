@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import JsBarcode from 'jsbarcode';
 
-// Karakterleri uygun formata dönüştür
+
 const encodeValue = (value) => {
     return value
         .replace(/ç/g, 'c')
@@ -27,7 +27,7 @@ const Barcode = ({ value }) => {
         if (barcodeRef.current) {
             JsBarcode(barcodeRef.current, encodeValue(value), {
                 format: 'CODE128',
-                displayValue: false, // Alt yazıyı gizle
+                 displayValue: false, 
             });
         }
     }, [value]);
@@ -36,6 +36,5 @@ const Barcode = ({ value }) => {
 };
 
 export default Barcode;
-
 
 

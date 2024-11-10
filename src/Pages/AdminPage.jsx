@@ -1,11 +1,212 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { FaUserPlus } from "react-icons/fa";
+// import { IoClose } from "react-icons/io5";
+
+// function AdminPage() {
+//     const [username, setUsername] = useState('');
+//     const [password, setPassword] = useState('');
+//     const [role, setRole] = useState('');
+//     const [users, setUsers] = useState([]);
+//     const [editUser, setEditUser] = useState(null);
+//     const [showForm, setShowForm] = useState(false);
+
+//     const userRegistration = async (e) => {
+//         e.preventDefault();
+//         if (editUser) {
+//             await updateUser(editUser.id);
+//         } else {
+//             try {
+//                 const response = await axios.post('http://localhost:3001/register', { username, password, role });
+//                 console.log('Kayıt başarılı:', response.data);
+//                 localStorage.setItem('token', response.data.token);
+//                 fetchUsers();
+//                 resetForm();
+//                 setShowForm(false);
+//             } catch (err) {
+//                 console.error('Kayıt başarısız:', err.response?.data || err.message);
+//             }
+//         }
+//     };
+
+//     const deleteUser = async (id) => {
+//         try {
+//             await axios.delete(`http://localhost:3001/users/${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+//             fetchUsers();
+//         } catch (err) {
+//             console.error('Kullanıcı silinemedi:', err);
+//         }
+//     };
+
+//     const updateUser = async (id) => {
+//         try {
+//             await axios.put(`http://localhost:3001/users/${id}`, { username, password, role }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+//             fetchUsers();
+//             resetForm();
+//             setShowForm(false);
+//         } catch (err) {
+//             console.error('Kullanıcı güncellenemedi:', err);
+//         }
+//     };
+
+//     const editUserDetails = (user) => {
+//         setEditUser(user);
+//         setUsername(user.username);
+//         setRole(user.role);
+//         setPassword(''); // Şifre alanını boş bırakıyoruz
+//         setShowForm(true);
+//     };
+
+//     const resetForm = () => {
+//         setUsername('');
+//         setPassword('');
+//         setRole('');
+//         setEditUser(null);
+//     };
+
+//     const fetchUsers = async () => {
+//         try {
+//             const response = await axios.get('http://localhost:3001/users', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+//             setUsers(response.data);
+//         } catch (err) {
+//             console.error('Kullanıcılar getirilemedi:', err.response?.data || err.message);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchUsers();
+//     }, []);
+
+//     return (
+//         <div className='min-h-screen bg-white-100 p-8'>
+//             <div className='max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6'>
+//                 <div className='flex justify-between items-center mb-6'>
+//                     <h2 className='text-4xl font-semibold text-black'>USER LİST</h2>
+//                     <button
+//                         className="btn btn-outline "
+//                         onClick={() => setShowForm(true)}
+//                     >
+//                        <FaUserPlus  />
+                        
+//                     </button>
+//                 </div>
+
+//                 {/* Kullanıcı Listesi */}
+//                 <div className='overflow-x-auto'>
+//                     <table className="min-w-full bg-white">
+//                         <thead className='bg-gray'>
+//                             <tr>
+//                                 <th className='py-3 px-8 border-b text-center text-black'>Username</th>
+//                                 <th className='py-3 px-8 border-b text-center text-black'>Role</th>
+//                                 <th className='py-3 px-8 border-b text-center text-black'>Actions</th>
+//                             </tr>
+//                         </thead>
+//                         <tbody>
+//                             {users.map((user) => (
+//                                 <tr key={user.id} className='text-center border-b text-black'>
+//                                     <td className='py-2 px-8'>{user.username}</td>
+//                                     <td className='py-2 px-8'>{user.role}</td>
+//                                     <td className='py-2 px-8 space-x-2'>
+//                                         <button 
+//                                             className="btn btn-success btn-sm"
+//                                             onClick={() => editUserDetails(user)}
+//                                         >
+//                                             Edit
+//                                         </button>
+//                                         <button 
+//                                             className='btn btn-danger btn-sm'
+//                                             onClick={() => deleteUser(user.id)}
+//                                         >
+//                                             Delete
+//                                         </button>
+//                                     </td>
+//                                 </tr>
+//                             ))}
+//                             {users.length === 0 && (
+//                                 <tr>
+//                                     <td colSpan="3" className='py-4 text-center text-gray-500'>No users found.</td>
+//                                 </tr>
+//                             )}
+//                         </tbody>
+//                     </table>
+//                 </div>
+
+//                 {showForm && (
+//                     <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+//                         <div className='bg-white w-11/12 max-w-md p-6 rounded-lg shadow-lg relative'>
+//                             <button
+//                                 className="btn btn-circle  absolute top-2 right-2"
+//                                 onClick={() => { resetForm(); setShowForm(false); }}
+//                             >
+//                                 <IoClose  size={24} />
+//                             </button>
+//                             <h3 className='text-xl font-semibold mb-4'>{editUser ? 'Edit User' : 'Add User'}</h3>
+//                             <form onSubmit={userRegistration} className='space-y-4'>
+//                                 <input 
+//                                     type='text' 
+//                                     className='w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500'
+//                                     placeholder='Username' 
+//                                     value={username} 
+//                                     onChange={(e) => setUsername(e.target.value)} 
+//                                     required
+//                                 />
+//                                 <input 
+//                                     type='password' 
+//                                     className='w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+//                                     placeholder='Password' 
+//                                     value={password} 
+//                                     onChange={(e) => setPassword(e.target.value)} 
+//                                     required={!editUser} 
+//                                 />
+//                                 <select 
+//                                     className='w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500'
+//                                     value={role} 
+//                                     onChange={(e) => setRole(e.target.value)} 
+//                                     required
+//                                 >
+//                                     <option value=''>Choose Role</option>
+//                                     <option value='admin'>Admin</option>
+//                                     <option value='user'>User</option>
+//                                     <option value='executive'>Executive</option>
+//                                 </select>
+//                                 <div className='flex space-x-4'>
+//                                     <button 
+//                                         className="btn btn-warning"
+//                                         value='submit'
+//                                     >
+//                                         {editUser ? 'Update' : 'Add'}
+//                                     </button>
+//                                     {editUser && 
+//                                         <button 
+//                                             className="btn btn-active btn-ghost "
+//                                             type='button' 
+//                                             onClick={() => { resetForm(); setShowForm(false); }}
+//                                         >
+//                                            Cancel
+//                                         </button>
+//                                     }
+//                                 </div>
+//                             </form>
+//                         </div>
+//                     </div>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// }
+
+// export default AdminPage;
+
+
+
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Styles/AdminPage.css';
+import { FaUserPlus } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 function AdminPage() {
     const [username, setUsername] = useState('');
@@ -13,17 +214,20 @@ function AdminPage() {
     const [role, setRole] = useState('');
     const [users, setUsers] = useState([]);
     const [editUser, setEditUser] = useState(null);
+    const [showForm, setShowForm] = useState(false);
 
     const userRegistration = async (e) => {
         e.preventDefault();
         if (editUser) {
-            updateUser(editUser.id);
+            await updateUser(editUser.id);
         } else {
             try {
                 const response = await axios.post('http://localhost:3001/register', { username, password, role });
                 console.log('Kayıt başarılı:', response.data);
                 localStorage.setItem('token', response.data.token);
                 fetchUsers();
+                resetForm();
+                setShowForm(false);
             } catch (err) {
                 console.error('Kayıt başarısız:', err.response?.data || err.message);
             }
@@ -44,6 +248,7 @@ function AdminPage() {
             await axios.put(`http://localhost:3001/users/${id}`, { username, password, role }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             fetchUsers();
             resetForm();
+            setShowForm(false);
         } catch (err) {
             console.error('Kullanıcı güncellenemedi:', err);
         }
@@ -53,7 +258,8 @@ function AdminPage() {
         setEditUser(user);
         setUsername(user.username);
         setRole(user.role);
-        setPassword('');
+        setPassword(''); // Şifre alanını boş bırakıyoruz
+        setShowForm(true);
     };
 
     const resetForm = () => {
@@ -67,7 +273,6 @@ function AdminPage() {
         try {
             const response = await axios.get('http://localhost:3001/users', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             setUsers(response.data);
-            console.log('Kullanıcılar:', response.data);
         } catch (err) {
             console.error('Kullanıcılar getirilemedi:', err.response?.data || err.message);
         }
@@ -78,85 +283,124 @@ function AdminPage() {
     }, []);
 
     return (
-        <div className='admin-container'>
-            <div className='row'>
-                <div className='col-lg-6'>
-                    <div className='admin-form'>
-                        <h3>{editUser ? 'Kullanıcı Güncelle' : 'Kullanıcı Ekle'}</h3>
-                        <form onSubmit={userRegistration}>
-                            <input 
-                                type='text' 
-                                className='form-input' 
-                                placeholder='Kullanıcı Adı' 
-                                value={username} 
-                                onChange={(e) => setUsername(e.target.value)} 
-                                required
-                            />
-                            <input 
-                                type='password' 
-                                className='form-input' 
-                                placeholder='Şifre' 
-                                value={password} 
-                                onChange={(e) => setPassword(e.target.value)} 
-                                required
-                            />
-                            <select 
-                                className='form-input' 
-                                value={role} 
-                                onChange={(e) => setRole(e.target.value)} 
-                                required
-                            >
-                                <option value='admin'>Admin</option>
-                                <option value='user'>User</option>
-                                <option value='executive'>Executive</option>
-                            </select>
-                            <div className='d-flex'>
-                                <button className='admin-btn' type='submit'>
-                                    {editUser ? 'Kullanıcı Güncelle' : 'Kullanıcı Ekle'}
-                                </button>
-                                {editUser && 
-                                    <button 
-                                        className='cancel-btn' 
-                                        type='button' 
-                                        onClick={resetForm}
-                                    >
-                                        İptal
-                                    </button>
-                                }
-                            </div>
-                        </form>
-                    </div>
+        <div className=' min-h-screen p-10'>
+            <div className='max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6'>
+                <div className=' flex justify-between items-center mb-6'>
+                    <h2 className='text-3xl font-semibold text-black '>USER MANAGEMENT</h2>
+                    <button
+                        className="btn btn-outline btn-default btn-sm  "
+                        onClick={() => setShowForm(true) }
+                    >
+                        <FaUserPlus size={24} className='mr-1' />
+                       
+                    </button>
+                   
+                   
                 </div>
-                <div className='col-lg-6'>
-                    <div className='user-list'>
-                        <h2>Kullanıcı Listesi</h2>
-                        <ul>
-                            {users.map(user => (
-                                <li key={user.id}>
-                                    {user.username} - {user.role}
-                                    <div>
+               
+
+                {/* Kullanıcı Listesi */}
+                <div className='overflow-x-auto mt-4'>
+                    <table className="table table-zebra w-full text-lg">
+                        <thead>
+                            <tr>
+                                <th className='text-center px-5 py-3 font-bold'>Username</th>
+                                <th className='text-center px-5 py-3 font-bold'>Role</th>
+                                <th className='text-center px-5 py-3 font-bold'>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.map((user) => (
+                                <tr key={user.id}>
+                                    <td className='text-center px-5 py-3 text-sm'>{user.username}</td>
+                                    <td className='text-center px-5 py-3 text-sm'>{user.role}</td>
+                                    <td className='text-center px-5 py-3 text-sm'>
                                         <button 
-                                            className='edit-btn' 
+                                            className="btn btn-sm btn-warning mr-2"
                                             onClick={() => editUserDetails(user)}
                                         >
-                                            Düzenle
+                                            Edit
                                         </button>
                                         <button 
-                                            className='delete-btn' 
+                                            className='btn btn-sm btn-danger'
                                             onClick={() => deleteUser(user.id)}
                                         >
-                                            Sil
+                                            Delete
                                         </button>
-                                    </div>
-                                </li>
+                                    </td>
+                                </tr>
                             ))}
-                        </ul>
-                    </div>
+                            {users.length === 0 && (
+                                <tr>
+                                    <td colSpan="3" className='py-4 text-center text-gray-500'>No users found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
+
+                {showForm && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+                        <div className='bg-white w-96 md:w-1/3 p-8 rounded-lg shadow-lg relative'>
+                            <button
+                                className="btn btn-circle btn-sm absolute top-2 right-2"
+                                onClick={() => { resetForm(); setShowForm(false); }}
+                            >
+                                <IoClose size={24} />
+                            </button>
+                            <h3 className='text-xl font-semibold mb-6'>{editUser ? 'Edit User' : 'Add User'}</h3>
+                            <form onSubmit={userRegistration} className='space-y-4'>
+                                <input 
+                                    type='text' 
+                                    className='input input-bordered w-full'
+                                    placeholder='Username' 
+                                    value={username} 
+                                    onChange={(e) => setUsername(e.target.value)} 
+                                    required
+                                />
+                                <input 
+                                    type='password' 
+                                    className='input input-bordered w-full'
+                                    placeholder='Password' 
+                                    value={password} 
+                                    onChange={(e) => setPassword(e.target.value)} 
+                                    required={!editUser} 
+                                />
+                                <select 
+                                    className='select select-bordered w-full'
+                                    value={role} 
+                                    onChange={(e) => setRole(e.target.value)} 
+                                    required
+                                >
+                                    <option value=''>Choose Role</option>
+                                    <option value='admin'>Admin</option>
+                                    <option value='user'>User</option>
+                                    <option value='executive'>Executive</option>
+                                </select>
+                                <div className='flex space-x-4'>
+                                    <button 
+                                        className="btn btn-primary btn-sm "
+                                        value='submit'
+                                    >
+                                        {editUser ? 'Update' : 'Add'}
+                                    </button>
+                                    {editUser && 
+                                        <button 
+                                            className="btn btn-ghost btn-sm "
+                                            type='button' 
+                                            onClick={() => { resetForm(); setShowForm(false); }}
+                                        >
+                                            Cancel
+                                        </button>
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
 
 export default AdminPage;
-

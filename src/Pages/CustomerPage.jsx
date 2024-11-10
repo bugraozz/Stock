@@ -4,8 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Styles/AdminPage.css';
+import { FiPlus, FiX } from 'react-icons/fi';
 
 function CustomerPage() {
     const [name, setName] = useState('');
@@ -14,6 +13,7 @@ function CustomerPage() {
     const [email, setEmail] = useState('');
     const [users, setUsers] = useState([]);
     const [editCustomer, setEditCustomer] = useState(null);
+    const [showForm, setShowForm] = useState(false);
 
     const CustomerRegistration = async (e) => {
         e.preventDefault();
@@ -25,6 +25,8 @@ function CustomerPage() {
                 console.log('Kayıt başarılı:', response.data);
                 localStorage.setItem('token', response.data.token);
                 fetchCustomer();
+                resetForm();
+                setShowForm(false);
             } catch (err) {
                 console.error('Kayıt başarısız:', err.response?.data || err.message);
             }
@@ -45,6 +47,7 @@ function CustomerPage() {
             await axios.put(`http://localhost:3001/customers/${id}`, { name, address, phone, email }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             fetchCustomer();
             resetForm();
+            setShowForm(false);
         } catch (err) {
             console.error('Kullanıcı güncellenemedi:', err);
         }
@@ -56,6 +59,7 @@ function CustomerPage() {
         setAddress(user.address);
         setPhone(user.phone);
         setEmail(user.email);
+        setShowForm(true);
     };
 
     const resetForm = () => {
@@ -81,92 +85,139 @@ function CustomerPage() {
     }, []);
 
     return (
-        <div className='admin-container'>
-            <div className='row'>
-                <div className='col-lg-6'>
-                    <div className='admin-form'>
-                        <h3>{editCustomer ? 'Customer Edit' : 'Customer Add'}</h3>
-                        <form onSubmit={CustomerRegistration}>
-                            <input 
-                                type='text' 
-                                className='form-input' 
-                                placeholder='Customer Name' 
-                                value={name} 
-                                onChange={(e) => setName(e.target.value)} 
-                                required
-                            />
-                            <input 
-                                type='text' 
-                                className='form-input' 
-                                placeholder='address'
-                                value={address} 
-                                onChange={(e) => setAddress(e.target.value)} 
-                                required
-                            />
-                           <input
-                                type='text'
-                                className='form-input'
-                                placeholder='phone'
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                required
-                            />
-                            <input
-                                type='text'
-                                className='form-input'
-                                placeholder='email'
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
+        <div className='overflow-x-auto min-h-screen  p-10'>
+            <div className='container mx-auto'>
+               
+                <div className='flex justify-between items-center mb-4'>
+                    <h2 className='text-4xl font-semibold'>Customers List</h2>
+                    <button
+                        className='flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition'
+                        onClick={() => setShowForm(true)}
+                    >
+                        <FiPlus className='mr' />
+                    </button>
+                </div>
 
-                            <div className='d-flex'>
-                                <button className='admin-btn' type='submit'>
-                                    {editCustomer ? 'Customer Edit' : 'Customer Add'}
-                                </button>
-                                {editCustomer && 
+                {/* Müşteri Listesi */}
+                
+                    <div className='overflow-x-auto border border-black-300 rounded-lg shadow-md'>
+                        <table className='table table-zebra '>
+                            <thead>
+                                <tr> 
+                                   
+                                    <th className='py-2 px-4 border-b text-center '>Name</th>
+                                    <th className='py-2 px-4 border-b text-center '>Address</th>
+                                    <th className='py-2 px-4 border-b text-center '>Telephone</th>
+                                    <th className='py-2 px-4 border-b text-center '>Email</th>
+                                    <th className='py-2 px-4 border-b text-center '>transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {users.map(user => (
+                                    <tr key={user.id} className='text-center border-black-500'>
+                                       
+                                        <td className='py-2 px-4 border-b'>{user.name}</td>
+                                        <td className='py-2 px-4 border-b'>{user.address}</td>
+                                        <td className='py-2 px-4 border-b'>{user.phone}</td>
+                                        <td className='py-2 px-4 border-b'>{user.email}</td>
+                                        <td className='py-2 px-4 border-b space-x-2'>
+                                            <button 
+                                                className='bg-green-700 hover:bg-green-700 text-white py-1 px-2 rounded'
+                                                onClick={() => editCustomerDetails(user)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button 
+                                                className='bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded'
+                                                onClick={() => deleteCustomer(user.id)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {users.length === 0 && (
+                                    <tr>
+                                        <td colSpan="6" className='py-4'>Customer not found.</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                
+
+                {/* Modal: Müşteri Ekleme/Güncelleme Formu */}
+                {showForm && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+                        <div className='bg-white w-11/12 max-w-md p-6 rounded shadow-lg relative'>
+                            <button
+                                className='absolute top-4 right-4 text-gray-500 hover:text-gray-700'
+                                onClick={() => { resetForm(); setShowForm(false); }}
+                            >
+                                <FiX size={24} />
+                            </button>
+                            <h3 className='text-xl font-semibold mb-4'>{editCustomer ? 'Customers Edit' : 'Add customers'}</h3>
+                            <form onSubmit={CustomerRegistration} className='space-y-4'>
+                                <input 
+                                    type='text' 
+                                    className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='Customer name' 
+                                    value={name} 
+                                    onChange={(e) => setName(e.target.value)} 
+                                    required
+                                />
+                                <input 
+                                    type='text' 
+                                    className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='Address' 
+                                    value={address} 
+                                    onChange={(e) => setAddress(e.target.value)} 
+                                    required
+                                />
+                                <input
+                                    type='text'
+                                    className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='Telephone'
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    required
+                                />
+                                <input
+                                    type='email'
+                                    className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='Email'
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+
+                                <div className='flex space-x-4 mt-4'>
                                     <button 
-                                        className='cancel-btn' 
-                                        type='button' 
-                                        onClick={resetForm}
+                                        className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition'
+                                        type='submit'
                                     >
-                                        Cancel
+                                        {editCustomer ? 'Edit' : 'Add'}
                                     </button>
-                                }
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div className='col-lg-6'>
-                    <div className='user-list'>
-                        <h2>Customers List</h2>
-                        <ul>
-                            {users.map(user => (
-                                <li key={user.id}>
-                                    {user.name} - {user.address} - {user.phone} - {user.email}
-                                    <div>
+                                    {editCustomer && 
                                         <button 
-                                            className='edit-btn' 
-                                            onClick={() => editCustomerDetails(user)}
+                                            className='bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+                                            type='button' 
+                                            onClick={() => { resetForm(); setShowForm(false); }}
                                         >
-                                            Edit
+                                            Cancel
                                         </button>
-                                        <button 
-                                            className='delete-btn' 
-                                            onClick={() => deleteCustomer(user.id)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                    }
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
 }
 
 export default CustomerPage;
+
+
 

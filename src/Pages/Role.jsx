@@ -1,42 +1,30 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
+const RoleContext = createContext();
 
-const Role = () => {
+export const useRole = () => {
+  return useContext(RoleContext);
+};
 
-        const [roles, setRoles] = useState([]);
-        const [error, setError] = useState(null);
-      
-        const fetchRoles = async () => {
-          try {
-            const response = await axios.get('http://localhost:3001/users');
-            const users = response.data;
-      
-            
-            users.forEach(user => {
-              if (user.role === 'admin') {
-                
-                console.log(`Admin Kullanıcı: ${user.name}`);
-              } else if (user.role === 'user') {
-                
-                console.log(`Normal Kullanıcı: ${user.name}`);
-              } else if (user.role === 'executive') {
-                
-                console.log(`Yönetici: ${user.name}`);
-              }
-            });
-      
-            setRoles(users);
-      
-          } catch (error) {
-            setError('Kullanıcı verileri yüklenirken hata oluştu.');
-            console.error(error);
-          }
-        };
-      
-        useEffect(() => {
-          fetchRoles();
-        }, []);
+export const RoleProvider = ({ children }) => {
+  const [role, setRole] = useState(null);
 
-}
+  useEffect(() => {
+    
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
+
+  const updateRole = (newRole) => {
+    localStorage.setItem('role', newRole);
+    setRole(newRole);
+  };
+
+  return (
+    <RoleContext.Provider value={{ role, updateRole }}>
+      {children}
+    </RoleContext.Provider>
+  );
+};
