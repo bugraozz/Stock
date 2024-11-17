@@ -77,7 +77,7 @@ const BarcodeScanner = ({ onScan, onClose }) => {
             <div id="video-container" ref={videoContainerRef}>
                 <div className="barcode-line"></div>
             </div>
-            <button onClick={handleClose} className="close-button">Close</button>
+          
         </div>
     );
 };

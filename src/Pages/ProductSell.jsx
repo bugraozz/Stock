@@ -179,11 +179,11 @@ function ProductSell() {
                 <div className="flex flex-col lg:flex-row gap-6 ">
                     {/* Products Table */}
                     <div className="flex-1 ">
-                        <div className="overflow-x-auto rounded-xl ">
+                        {/* <div className="overflow-x-auto rounded-xl ">
                             <table className="min-w-full bg-white border border-black-200 rounded-lg shadow-md ">
                                 <thead className="bg-gray-200">
                                     <tr>
-                                        <th className="px-4 py-2  text-center text-black">#</th>
+                                        <th  className="px-4 py-2  text-center text-black">#</th>
                                         <th className="px-4 py-2 text-center text-black">Product</th>
                                         <th className="px-4 py-2 text-center text-black">Selling Price</th>
                                         <th className="px-4 py-2  text-center text-black">Quantity</th>
@@ -208,7 +208,48 @@ function ProductSell() {
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
+                        </div> */}
+
+<div className="overflow-x-auto p-4">
+  <table className="table w-full border border-gray-300 rounded-lg shadow-md">
+    {/* Head */}
+    <thead className="bg-gray-200 text-gray-700 text-lg">
+      <tr>
+        <th className="py-4 text-center">#</th>
+        <th className="py-4 text-center">Product</th>
+        <th className="py-4 text-center">Selling Price</th>
+        <th className="py-4 text-center">Quantity</th>
+        <th className="py-4 text-center">Category</th>
+        <th className="py-4 text-center">Supplier</th>
+      </tr>
+    </thead>
+    {/* Body */}
+    <tbody>
+      {products.map((product, index) => (
+        <tr
+          key={product.id}
+          onClick={() => handleRowClick(product)}
+          className={`cursor-pointer ${
+            selectedProduct?.id === product.id
+              ? "bg-blue-200"
+              : "hover:bg-blue-100"
+          }`}
+        >
+          <td className="py-3 px-4 text-center text-gray-800">{index + 1}</td>
+          <td className="py-3 px-4 text-center text-gray-800">{product.Product_Name}</td>
+          <td className="py-3 px-4 text-center text-gray-800">
+            {product.SellingPrice} {product.Currency || "₺"}
+          </td>
+          <td className="py-3 px-4 text-center text-gray-800">{product.Quantity}</td>
+          <td className="py-3 px-4 text-center text-gray-800">{product.Category}</td>
+          <td className="py-3 px-4 text-center text-gray-800">{product.Supplier}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+
 
                         {/* Selected Product Details */}
                         {selectedProduct && (
@@ -228,7 +269,7 @@ function ProductSell() {
                                     </div>
                                     <button
                                         onClick={addToCart}
-                                        className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+                                        className="btn btn-primary btn-sm  mt-4"
                                     >
                                         Add to Cart
                                     </button>
@@ -267,7 +308,7 @@ function ProductSell() {
 
                                     <button
                                         onClick={handleSell}
-                                        className="btn btn-primary"
+                                        className="btn btn-primary "
                                     >
                                         Sell ​​All
                                     </button>
@@ -289,13 +330,13 @@ function ProductSell() {
                         <div className="flex justify-end space-x-4">
                             <button
                                 onClick={() => setShowModal(false)}
-                                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 transition duration-200"
+                                className="btn btn-secondary btn-sm"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={confirmSell}
-                                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
+                                className="btn btn-success btn-sm"
                             >
                                 Confirm
                             </button>

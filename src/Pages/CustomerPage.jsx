@@ -91,7 +91,7 @@ function CustomerPage() {
                 <div className='flex justify-between items-center mb-4'>
                     <h2 className='text-4xl font-semibold'>Customers List</h2>
                     <button
-                        className='flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition'
+                        className="btn btn-primary btn-sm"
                         onClick={() => setShowForm(true)}
                     >
                         <FiPlus className='mr' />
@@ -122,13 +122,13 @@ function CustomerPage() {
                                         <td className='py-2 px-4 border-b'>{user.email}</td>
                                         <td className='py-2 px-4 border-b space-x-2'>
                                             <button 
-                                                className='bg-green-700 hover:bg-green-700 text-white py-1 px-2 rounded'
+                                                className="btn btn-success btn-sm"
                                                 onClick={() => editCustomerDetails(user)}
                                             >
                                                 Edit
                                             </button>
                                             <button 
-                                                className='bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded'
+                                                className="btn btn-info btn-sm"
                                                 onClick={() => deleteCustomer(user.id)}
                                             >
                                                 Delete
@@ -193,14 +193,14 @@ function CustomerPage() {
 
                                 <div className='flex space-x-4 mt-4'>
                                     <button 
-                                        className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition'
+                                        className="btn btn-success btn-sm"
                                         type='submit'
                                     >
                                         {editCustomer ? 'Edit' : 'Add'}
                                     </button>
                                     {editCustomer && 
                                         <button 
-                                            className='bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+                                            className="btn btn-secondary btn-sm"
                                             type='button' 
                                             onClick={() => { resetForm(); setShowForm(false); }}
                                         >

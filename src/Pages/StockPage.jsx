@@ -273,13 +273,13 @@ return (
                     <div className="card-body">
                         <div className="flex justify-between items-center">
                             <h2 className="card-title">Barcode Scanner</h2>
-                            <button onClick={() => { setShowScanner(false); handleClose(); }} className="btn btn-error btn-sm">X</button>
+                          
                         </div>
                         <div className="mt-4">
                             <BarcodeScanner onScan={handleBarcodeDetected} onClose={() => setShowScanner(false)} />
                         </div>
                         <div className="card-actions justify-end mt-4">
-                            <button className="btn btn-secondary" onClick={() => { setShowScanner(false); handleClose(); }}>Close</button>
+                            <button className="btn btn-secondary btn-sm" onClick={() => { setShowScanner(false); handleClose(); }}>Close</button>
                         </div>
                     </div>
                 </div>
@@ -306,8 +306,8 @@ return (
                                 <option value="EUR">EUR</option>
                             </select>
                             <div className="card-actions justify-end mt-4 space-x-2">
-                                <button type="submit" className="btn btn-primary">{isEditMode ? 'Update' : 'Add'}</button>
-                                <button type="button" onClick={handleClose} className="btn btn-secondary">Close</button>
+                                <button type="submit" className="btn btn-primary btn-sm">{isEditMode ? 'Update' : 'Add'}</button>
+                                <button type="button" onClick={handleClose} className="btn btn-secondary btn-sm">Close</button>
                             </div>
                         </form>
                     </div>
